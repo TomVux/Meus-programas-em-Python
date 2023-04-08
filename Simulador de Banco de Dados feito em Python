@@ -1,0 +1,90 @@
+import phonenumbers
+
+clientes = []
+
+pedidos = [
+    {"id": 1, "data": "2023-04-07", "valor_total": 100.0},
+    {"id": 2, "data": "2023-04-06", "valor_total": 200.0},
+    {"id": 3, "data": "2023-04-05", "valor_total": 300.0},
+]
+
+
+def adicionar_cliente():
+    """
+    Adiciona um novo cliente à tabela 'clientes' por meio de input do usuário.
+    """
+    nome = input("Digite o nome do cliente: ")
+    endereco = input("Digite o endereço do cliente: ")
+    
+    # Solicita o número de telefone do usuário e analisa o número utilizando a biblioteca 'phonenumbers'
+    while True:
+        telefone = input("Digite o telefone do cliente: ")
+        try:
+            telefone_parse = phonenumbers.parse(telefone, "BR")
+            break
+        except phonenumbers.phonenumberutil.NumberParseException:
+            print("Número de telefone inválido. Por favor, tente novamente.")
+    
+    # Formata o número de telefone no padrão (XX) XXXX-XXXX
+    telefone_formatado = phonenumbers.format_number(telefone_parse, phonenumbers.PhoneNumberFormat.NATIONAL)
+    
+    # Gera um novo ID para o cliente
+    if clientes:
+        novo_id = clientes[-1]["id"] + 1
+    else:
+        novo_id = 1
+    
+    # Cria um novo dicionário com as informações do cliente
+    novo_cliente = {
+        "id": novo_id,
+        "nome": nome,
+        "endereco": endereco,
+        "telefone": telefone_formatado
+    }
+    
+    # Adiciona o novo cliente à lista de clientes
+    clientes.append(novo_cliente)
+    
+    print("Cliente adicionado com sucesso!")
+
+def buscar_cliente_por_nome(nome):
+    """
+    Busca um cliente na tabela 'clientes' pelo nome.
+    Retorna uma lista com todos os clientes que possuem o nome informado.
+    """
+    resultado = []
+    for cliente in clientes:
+        if cliente["nome"] == nome:
+            resultado.append(cliente)
+    return resultado
+
+def adicionar_pedido(pedido):
+    """
+    Adiciona um novo pedido na tabela 'pedidos'.
+    """
+    pedidos.append(pedido)
+
+def buscar_pedido_por_id(id):
+    """
+    Busca um pedido na tabela 'pedidos' pelo ID.
+    Retorna o pedido encontrado ou None se não existir.
+    """
+    for pedido in pedidos:
+        if pedido["id"] == id:
+            return pedido
+    return None
+
+# Adiciona um novo cliente
+adicionar_cliente()
+
+# Busca todos os clientes com nome "José"
+clientes_jose = buscar_cliente_por_nome("José")
+
+# Adiciona um novo pedido
+adicionar_pedido({"id": 4, "data": "2023-04-04", "valor_total": 400.0})
+
+# Busca o pedido com ID 2
+pedido_id_2 = buscar_pedido_por_id(2)
+
+
+print(clientes)
