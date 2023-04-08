@@ -1,0 +1,7 @@
+telefone = '87912345678'
+
+telefone_formatado = '({}) {}-{}'.format(
+    telefone[:2], telefone[2:7], telefone[7:]
+    )
+
+print(telefone_formatado)
