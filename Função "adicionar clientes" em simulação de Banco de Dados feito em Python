@@ -1,0 +1,56 @@
+import phonenumbers
+
+clientes = []
+
+def adicionar_cliente():
+        """
+        Adiciona um novo cliente à tabela 'clientes' por meio de input do usuário.
+        """
+        nome = input("Digite o nome do cliente: ")
+        endereco = input("Digite o endereço do cliente: ")
+        
+        # Solicita o número de telefone do usuário e analisa o número utilizando a biblioteca 'phonenumbers'
+        while True:
+            telefone = input("Digite o telefone do cliente: ")
+            try:
+                telefone_parse = phonenumbers.parse(telefone, "BR")
+                break
+            except phonenumbers.phonenumberutil.NumberParseException:
+                print("Número de telefone inválido. Por favor, tente novamente.")
+        
+        # Formata o número de telefone no padrão (XX) XXXX-XXXX
+        telefone_formatado = phonenumbers.format_number(telefone_parse, phonenumbers.PhoneNumberFormat.NATIONAL)
+        
+        # Gera um novo ID para o cliente
+        if clientes:
+            novo_id = clientes[-1]["id"] + 1
+        else:
+            novo_id = 1
+        
+        # Cria um novo dicionário com as informações do cliente
+        novo_cliente = {
+            "id": novo_id,
+            "nome": nome,
+            "endereco": endereco,
+            "telefone": telefone_formatado
+        }
+        
+        # Adiciona o novo cliente à lista de clientes
+        clientes.append(novo_cliente)
+        print("Cliente adicionado com sucesso!")
+
+def pergunta_input():
+    pergunta = int(input('''Qual ação você quer executar?
+Tecle:
+1 - Para adicionar novo cliente;
+2 - Para encerrar.
+
+Sua resposta:
+'''))
+    return pergunta
+
+# Adiciona um novo cliente
+while pergunta_input() == 1:
+    adicionar_cliente()
+    
+print('Lista de clientes: ', clientes)
